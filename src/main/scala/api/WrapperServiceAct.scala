@@ -3,30 +3,19 @@ package api
 import akka.actor.Actor
 import akka.event.Logging
 import akka.event.slf4j.SLF4JLogging
+import serializables.{HumanInteraction, StatusHistory, StatusMsg}
+import spray.client.pipelining._
 import spray.http.StatusCodes._
 import spray.http.{HttpRequest, HttpResponse}
-import spray.httpx.SprayJsonSupport
-import spray.json.DefaultJsonProtocol
-import spray.routing.directives.LogEntry
 import spray.routing._
-import spray.client.pipelining._
+import spray.routing.directives.LogEntry
 
-import scala.concurrent.{Future, ExecutionContext}
-import scala.util.{Failure => FutureFailure, Success => FutureSuccess, Try}
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure => FutureFailure, Success => FutureSuccess}
 
 /**
  * REST Service actor.
  */
-
-case class HumanInteraction(status:String,body:String,created_on:String)
-case class StatusMsg(status:String,last_updated:String)
-case class StatusHistory(status:StatusMsg,hmInteraction:Seq[HumanInteraction])
-
-object GithubJsonProtocol extends DefaultJsonProtocol {
-  implicit val hmInteractionFormat = jsonFormat3(HumanInteraction)
-  implicit val stMsgFormat = jsonFormat2(StatusMsg)
-  implicit val stHistFormat = jsonFormat2(StatusHistory)
-}
 
 
 class WrapperServiceAct extends Actor with WrapperService {
@@ -52,10 +41,9 @@ trait WrapperService extends HttpService with SLF4JLogging {
 
   implicit val ec: ExecutionContext = actorRefFactory.dispatcher
 
-  import SprayJsonSupport._
-  import GithubJsonProtocol._
+  import serializables.Implicits._
   import spray.json._
-
+  import spray.httpx.SprayJsonSupport._
   val hmInteractionEndPoint: HttpRequest => Future[Seq[HumanInteraction]] = sendReceive ~> unmarshal[Seq[HumanInteraction]]
   val statusEndPoint : HttpRequest => Future[StatusMsg] = sendReceive ~> unmarshal[StatusMsg]
 

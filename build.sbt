@@ -1,3 +1,5 @@
+import _root_.sbtassembly.AssemblyPlugin.autoImport._
+
 name := "github-wrapper"
 
 version := "0.1"
@@ -20,6 +22,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
   "com.typesafe.akka" %% "akka-remote" % akkaVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
-  "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
+  "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
+  "org.specs2" %% "specs2" % "2.3.11" % "test"
 )
-

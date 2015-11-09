@@ -1,0 +1,13 @@
+# SBT specific
+.cache
+.history
+dist/*
+target/
+project/project
+
+#IDEA specific
+.idea/
+*.iml
+/.idea_modules
+/out
+

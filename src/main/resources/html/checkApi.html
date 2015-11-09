@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jQuery.getJSON demo</title>
+    <style>
+        img {
+            height: 100px;
+            float: left;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+
+<div id="images"></div>
+<script>
+    (function() {
+        var api1 = "http://localhost:8080/api/status.json";
+
+        $.getJSON( api1, {
+            format: "json"
+        })
+                .done(function( data ) {
+                    document.write("Current Status: "+data.status +"<br>")
+                });
+    })();
+</script>
+
+<script>
+    (function() {
+        var api1 = "http://localhost:8080/api/history.json";
+
+        $.getJSON( api1, {
+            format: "json"
+        })
+                .done(function( data ) {
+                    document.write("Availability: <br>")
+                    for(i=0; i<data.length; i++){
+                        document.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+                                ""+data[i].created_on +": "+data[i].status+": " +data[i].body + "<br>");
+                    }
+                });
+    })();
+</script>
+
+</body>
+</html>
